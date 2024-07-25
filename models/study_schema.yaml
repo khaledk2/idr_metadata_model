@@ -27,6 +27,21 @@ classes:
       publication_doi_url:
         description: Publication DOI URL
         range: string
+  License:
+    description: The study license
+    attributes:
+      license:
+        range: string
+        required: true
+      copyright:
+        range: string
+        required: true
+      data_publisher:
+        range: string
+        required: true
+      data_DOI:
+        range: string
+        required: true
   Study:
     description: A study entity.
     attributes:
@@ -48,7 +63,7 @@ classes:
         required: true
       license:
         description: The study license
-        range: string
+        range: License
         required: true
       data_publisher:
         description: The study publisher, e.g. idr

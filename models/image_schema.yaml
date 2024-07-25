@@ -100,6 +100,14 @@ classes:
       siRNA_pool_identifier:
         required: false
         range: string
+  Cell_line:
+    attributes:
+      cell_lines:
+        range: string
+        required: true
+      cell_lines_supplementary:
+        range: string
+        required: false
   Image:
     attributes:
       id:
@@ -134,3 +142,9 @@ classes:
         required: false
         range: siRNA
         multivalued: true
+      cell_line:
+        required: false
+        range: Cell_line
+      Protein:
+        required: false
+        range: string
