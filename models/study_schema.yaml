@@ -3,14 +3,13 @@ name: image_idr_schema
 description: A LinkML schema translated from the idr key-value pairs for study
 
 prefixes:
-
   linkml: https://w3id.org/linkml/
 
 default_prefix: linkml
 
-
 imports:
-  linkml:types
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
 
 classes:
   Publication:

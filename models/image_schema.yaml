@@ -12,8 +12,11 @@ prefixes:
   linkml: https://w3id.org/linkml/
 
 default_prefix: linkml
+
 imports:
-  linkml:types
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
 
 classes:
   Organism_part:
@@ -22,7 +25,7 @@ classes:
         organism_part:
           range: string
           required: true
-        organism_part identifier:
+        organism_part_identifier:
           range: string
           required: false
   Organism:
