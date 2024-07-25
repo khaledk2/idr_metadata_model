@@ -1,0 +1,133 @@
+# linkml-validate -s image_schema.yaml
+#gen-python image_schema.yaml --genmeta  > image_schema.py
+#install plantuml
+#gen-plantuml image_schema.yaml > image_3.puml
+#plantuml  image_3.puml
+
+
+id: idr.image.schema
+name: image_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for image
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+imports:
+  linkml:types
+
+classes:
+  Organism_part:
+      description: An organism part entity.
+      attributes:
+        organism_part:
+          range: string
+          required: true
+        organism_part identifier:
+          range: string
+          required: false
+  Organism:
+    description: An organism part entity.
+    attributes:
+      organism:
+        range: string
+        required: true
+      organism_part:
+        range: Organism_part
+        required: false
+  Gene:
+    attributes:
+      gene_symbol:
+        required: true
+        range: string
+      gene_identifier:
+        required: true
+        range: string
+      gene_identifier_url:
+        required: true
+        range: uri
+      organism:
+        required: false
+        range: Organism
+  Phenotype:
+    attributes:
+      phenotype:
+        required: true
+        range: string
+      phenotype_term_name:
+        required: true
+        range: string
+      phenotype_term_accession:
+        required: false
+        range: string
+      phenotype_term_accession_url:
+        required: false
+        range: uri
+
+  Compound:
+    attributes:
+      compound_name:
+        required: true
+        range: string
+      compound_name_url:
+        required: true
+        range: uri
+
+  Pathology:
+    attributes:
+      pathology:
+        required: true
+        range: string
+      pathology_identifier:
+        required: true
+        range: string
+
+  Antibody:
+    attributes:
+      antibody:
+        required: true
+        range: string
+      antibody_identifier:
+        required: true
+        range: string
+  siRNA:
+    attributes:
+      siRNA_identifier:
+        required: true
+        range: string
+      siRNA_pool_identifier:
+        required: false
+        range: string
+  Image:
+    attributes:
+      id:
+        required: true
+        range: integer
+      name:
+        required: true
+        range: string
+      organism:
+        required: false
+        range: Organism
+        multivalued: true
+      gene:
+        required: false
+        range: Gene
+      phenotype:
+        required: false
+        range: Phenotype
+      compound:
+        required: false
+        range: Compound
+      Pathology:
+        required: false
+        range: Pathology
+        multivalued: true
+      antibody:
+        required: false
+        range: Antibody
+        multivalued: true
+
+      siRNA:
+        required: false
+        range: siRNA
+        multivalued: true

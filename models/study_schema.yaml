@@ -1,0 +1,94 @@
+id: idr.study.schema
+name: image_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for study
+
+prefixes:
+
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+
+imports:
+  linkml:types
+
+classes:
+  Publication:
+    description: A Publication entity.
+    attributes:
+      publication_title:
+        description: Publication Title
+        range: string
+      publication_authors:
+        description: Publication Title
+        range: string
+      publication_doi:
+        description: Publication DOI
+        range: string
+      publication_doi_url:
+        description: Publication DOI URL
+        range: string
+  Study:
+    description: A study entity.
+    attributes:
+      id:
+        identifier: true
+        description: The unique identifier for a study.
+        range: integer
+      imaging_method:
+        description: Imaging Method
+        range: string
+        required: true
+      publication:
+        description: The publication for a study.
+        range: Publication
+        required: false
+      study_type:
+        description: The study type
+        range: string
+        required: true
+      license:
+        description: The study license
+        range: string
+        required: true
+      data_publisher:
+        description: The study publisher, e.g. idr
+        range: string
+        required: true
+      sample_type:
+        description: sample type
+        range: string
+        required: false
+      organism:
+        description: sample organism
+        range: string
+        required: false
+      release_date:
+        #range: date
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+        required: true
+  No_screen_study:
+    is_a: Study
+    description: An experimental study
+    attributes:
+      experimental_description:
+        description: experimental description
+        range: string
+        required: true
+  Screen_study:
+    is_a: Study
+    description: Screen study
+    attributes:
+      screen_description:
+        description: screen description
+        range: string
+        required: true
+      screen_technology_type:
+        description: Screen Technology Type
+        required: true
+        range: string
+      screen_type:
+        description: Screen Type
+        required: true
+        range: string
