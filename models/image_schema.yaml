@@ -129,7 +129,7 @@ classes:
       compound:
         required: false
         range: Compound
-      Pathology:
+      pathology:
         required: false
         range: Pathology
         multivalued: true
