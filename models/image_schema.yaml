@@ -37,6 +37,7 @@ classes:
       organism_part:
         range: Organism_part
         required: false
+        multivalued: true
   Gene:
     attributes:
       gene_symbol:
@@ -48,6 +49,7 @@ classes:
       gene_identifier_url:
         required: true
         range: uri
+
       organism:
         required: false
         range: Organism
@@ -119,7 +121,6 @@ classes:
       organism:
         required: false
         range: Organism
-        multivalued: true
       gene:
         required: false
         range: Gene
