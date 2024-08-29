@@ -1,0 +1,28 @@
+id: idr.antibody.schema
+name: antibody_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for antibody
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+  - organism_schema
+  - gene_schema
+  - phenotype_schema
+  - compound_schema
+  - pathology_schema
+  - antibody_schema
+
+classes:
+
+  Antibody:
+    attributes:
+      antibody:
+        required: true
+        range: string
+      antibody_identifier:
+        required: true
+        range: string

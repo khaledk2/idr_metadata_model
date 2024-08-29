@@ -1,0 +1,21 @@
+id: idr.siRNA.schema
+name: siRNA_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for siRNA
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+  siRNA:
+    attributes:
+      siRNA_identifier:
+        required: true
+        range: string
+      siRNA_pool_identifier:
+        required: false
+        range: string

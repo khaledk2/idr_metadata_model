@@ -1,0 +1,22 @@
+id: idr.pathology.schema
+name: pathology_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for Pathology
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+
+  Pathology:
+    attributes:
+      pathology:
+        required: true
+        range: string
+      pathology_identifier:
+        required: true
+        range: string

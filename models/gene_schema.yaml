@@ -1,0 +1,27 @@
+id: idr.gene.schema
+name: gene_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for gene
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+  Gene :
+    attributes :
+      gene_symbol :
+        required : true
+        range : string
+      gene_identifier :
+        required : true
+        range : string
+      gene_identifier_url :
+        required : true
+        range : uri
+      organism :
+        required : false
+        range : Organism

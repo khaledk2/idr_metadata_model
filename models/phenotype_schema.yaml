@@ -1,0 +1,27 @@
+id: idr.phenotype.schema
+name: phenotype_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for gene
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+    Phenotype :
+        attributes :
+            phenotype :
+                required : true
+                range : string
+            phenotype_term_name :
+                required : true
+                range : string
+            phenotype_term_accession :
+                required : false
+                range : string
+            phenotype_term_accession_url :
+                required : false
+                range : uri

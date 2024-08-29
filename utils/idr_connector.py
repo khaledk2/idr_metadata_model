@@ -10,6 +10,7 @@ import json
 import requests
 import sys
 
+
 submit_query_url ="https://idr.openmicroscopy.org/searchengine/api/v1/resources/submitquery/"
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -67,6 +68,25 @@ def call_omero_searchengine_return_results(url, data=None, method="post"):
     except Exception as ex:
         logging.info("Error: %s" % ex)
 
+def get_query_results(re_attribute, value, container_name=None):
+    and_filters = [
+        {
+            "name": re_attribute,
+            "value": value,  # "idr0051", #"idr0157",
+            "operator": "equals",
+            "resource": "image"
+        },
+    ]
+    if container_name:
+        and_filters.append({
+            "name": "name",
+            "value": container_name, #"idr0051", #"idr0157",
+            "operator": "contains",
+            "resource": "container"
+        })
+
+    query_data = {"query_details": {"and_filters": and_filters}}
+    return query_searchengine(query_data)
 
 def get_results(container_name):
     start = datetime.datetime.now()
@@ -80,6 +100,8 @@ def get_results(container_name):
     ]
 
     query_data = {"query_details": {"and_filters": and_filters}}
+    return query_searchengine(query_data)
+def query_searchengine(query_data):
 
     query_data_json = json.dumps(query_data)
     bookmark, total_results = call_omero_searchengine_return_results(
@@ -92,7 +114,7 @@ def get_results(container_name):
 
     while next_page:  # len(received_results) < total_results:
         query_data_ = {
-            "query_details": {"and_filters": and_filters},
+            "query_details": query_data["query_details"],
             "pagination": pagination_dict,
         }
         query_data_json_ = json.dumps(query_data_)
