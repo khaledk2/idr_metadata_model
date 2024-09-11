@@ -22,7 +22,14 @@ total_pages = 0
 pagination_dict = None
 next_page = None
 
-
+def rest_variables():
+    global page, received_results, total_pages, pagination_dict, next_page, ids
+    received_results = []
+    page = 1
+    ids = []
+    total_pages = 0
+    pagination_dict = None
+    next_page = None
 def get_current_page_bookmark(pagination_dict):
     current_page = pagination_dict["current_page"]
     bookmark = None
@@ -32,7 +39,7 @@ def get_current_page_bookmark(pagination_dict):
     return current_page, bookmark
 
 
-def call_omero_searchengine_return_results(url, data=None, method="post"):
+def call_omero_searchengine_return_results(url, data=None, method="post",):
     global page, total_pages, pagination_dict, next_page
     if method == "post":
         resp = requests.post(url, data=data)
@@ -69,6 +76,7 @@ def call_omero_searchengine_return_results(url, data=None, method="post"):
         logging.info("Error: %s" % ex)
 
 def get_query_results(re_attribute, value, container_name=None):
+    rest_variables()
     and_filters = [
         {
             "name": re_attribute,

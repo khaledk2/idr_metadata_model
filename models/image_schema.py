@@ -1,5 +1,5 @@
 # Auto generated from image_schema.yaml by pythongen.py version: 0.0.1
-# Generation date: 2024-08-28T23:43:28
+# Generation date: 2024-09-11T22:17:35
 # Schema: image_idr_schema
 #
 # id: idr.image.schema
@@ -60,7 +60,7 @@ class Image(YAMLRoot):
     antibody: Optional[Union[Union[dict, "Antibody"], List[Union[dict, "Antibody"]]]] = empty_list()
     siRNA: Optional[Union[Union[dict, "SiRNA"], List[Union[dict, "SiRNA"]]]] = empty_list()
     cell_line: Optional[Union[dict, "CellLine"]] = None
-    Protein: Optional[str] = None
+    protein: Optional[Union[dict, "Protein"]] = None
 
     def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
         if self._is_empty(self.id):
@@ -94,8 +94,8 @@ class Image(YAMLRoot):
         if self.cell_line is not None and not isinstance(self.cell_line, CellLine):
             self.cell_line = CellLine(**as_dict(self.cell_line))
 
-        if self.Protein is not None and not isinstance(self.Protein, str):
-            self.Protein = str(self.Protein)
+        if self.protein is not None and not isinstance(self.protein, Protein):
+            self.protein = Protein(**as_dict(self.protein))
 
         super().__post_init__(**kwargs)
 
@@ -349,6 +349,34 @@ class CellLine(YAMLRoot):
         super().__post_init__(**kwargs)
 
 
+@dataclass
+class Protein(YAMLRoot):
+    _inherited_slots: ClassVar[List[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = LINKML["Protein"]
+    class_class_curie: ClassVar[str] = "linkml:Protein"
+    class_name: ClassVar[str] = "Protein"
+    class_model_uri: ClassVar[URIRef] = LINKML.Protein
+
+    Protein: str = None
+    Protein_Name: Optional[str] = None
+    Protein_URL: Optional[Union[str, URI]] = None
+
+    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
+        if self._is_empty(self.Protein):
+            self.MissingRequiredField("Protein")
+        if not isinstance(self.Protein, str):
+            self.Protein = str(self.Protein)
+
+        if self.Protein_Name is not None and not isinstance(self.Protein_Name, str):
+            self.Protein_Name = str(self.Protein_Name)
+
+        if self.Protein_URL is not None and not isinstance(self.Protein_URL, URI):
+            self.Protein_URL = URI(self.Protein_URL)
+
+        super().__post_init__(**kwargs)
+
+
 # Enumerations
 
 
@@ -386,8 +414,8 @@ slots.image__siRNA = Slot(uri=LINKML.siRNA, name="image__siRNA", curie=LINKML.cu
 slots.image__cell_line = Slot(uri=LINKML.cell_line, name="image__cell_line", curie=LINKML.curie('cell_line'),
                    model_uri=LINKML.image__cell_line, domain=None, range=Optional[Union[dict, CellLine]])
 
-slots.image__Protein = Slot(uri=LINKML.Protein, name="image__Protein", curie=LINKML.curie('Protein'),
-                   model_uri=LINKML.image__Protein, domain=None, range=Optional[str])
+slots.image__protein = Slot(uri=LINKML.protein, name="image__protein", curie=LINKML.curie('protein'),
+                   model_uri=LINKML.image__protein, domain=None, range=Optional[Union[dict, Protein]])
 
 slots.organismPart__organism_part = Slot(uri=LINKML.organism_part, name="organismPart__organism_part", curie=LINKML.curie('organism_part'),
                    model_uri=LINKML.organismPart__organism_part, domain=None, range=str)
@@ -454,3 +482,12 @@ slots.cellLine__cell_lines = Slot(uri=LINKML.cell_lines, name="cellLine__cell_li
 
 slots.cellLine__cell_lines_supplementary = Slot(uri=LINKML.cell_lines_supplementary, name="cellLine__cell_lines_supplementary", curie=LINKML.curie('cell_lines_supplementary'),
                    model_uri=LINKML.cellLine__cell_lines_supplementary, domain=None, range=Optional[str])
+
+slots.protein__Protein = Slot(uri=LINKML.Protein, name="protein__Protein", curie=LINKML.curie('Protein'),
+                   model_uri=LINKML.protein__Protein, domain=None, range=str)
+
+slots.protein__Protein_Name = Slot(uri=LINKML.Protein_Name, name="protein__Protein_Name", curie=LINKML.curie('Protein_Name'),
+                   model_uri=LINKML.protein__Protein_Name, domain=None, range=Optional[str])
+
+slots.protein__Protein_URL = Slot(uri=LINKML.Protein_URL, name="protein__Protein_URL", curie=LINKML.curie('Protein_URL'),
+                   model_uri=LINKML.protein__Protein_URL, domain=None, range=Optional[Union[str, URI]])

@@ -6,7 +6,7 @@ Then it will get the json from the objects and validate it using the schema mode
 This script is still in progress
 '''
 
-from models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound
+from models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound, Protein
 
 import sys
 import logging
@@ -20,7 +20,6 @@ logger=logging.getLogger("idr_metadata_model")
 logger.setLevel(logging.INFO)
 
 from utils.idr_connector import get_results, get_query_results
-
 
 muti_values=[""]
 def convert_to_key_value(json_ob):
@@ -56,6 +55,7 @@ def process_results(images_results, target_schema):
         compound= None
         cellLine=None
         organismPart_=None
+        protein=None
         if target_schema.lower()=="all" or target_schema.lower()=="organism":
             pass
 
@@ -71,7 +71,10 @@ def process_results(images_results, target_schema):
         if (target_schema.lower()=="all" or target_schema.lower()=="compound name") and image_.get("Compound Name"):
             compound=Compound(compound_name=image_.get("Compound Name"), compound_name_url=image_.get("Compound Name URL"))
 
-        image_obj=Image(id=image.get("id"), name=image.get("name"), organism=organism,pathology=pathology, phenotype=phenotype, compound=compound, cell_line=cellLine)
+        if (target_schema.lower()=="all" or target_schema.lower()=="protein") and image_.get("Protein URL"):
+            protein=Protein(Protein=image_.get("Protein"), Protein_URL=image_.get("Protein URL"))
+
+        image_obj=Image(id=image.get("id"), name=image.get("name"), organism=organism,pathology=pathology, phenotype=phenotype, compound=compound, cell_line=cellLine, protein=protein)
 
         img_dict=json.loads(json_dumper.dumps(image_obj))
         del img_dict['@type']

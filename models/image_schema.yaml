@@ -23,6 +23,7 @@ imports:
   - antibody_schema
   - siRNA_schema
   - cell_line_schema
+  - protein_schema
 
 classes:
   Image:
@@ -53,7 +54,6 @@ classes:
         required: false
         range: Antibody
         multivalued: true
-
       siRNA:
         required: false
         range: siRNA
@@ -61,6 +61,8 @@ classes:
       cell_line:
         required: false
         range: Cell_line
-      Protein:
+      protein:
         required: false
-        range: string
+        range: Protein
+
+
