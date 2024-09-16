@@ -13,7 +13,8 @@ imports:
 classes:
   Compound:
     attributes:
-      compound_name:
+      compound name:
+        identifier : true
         required: true
         range: string
       compound_name_url:

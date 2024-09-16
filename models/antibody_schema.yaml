@@ -21,6 +21,7 @@ classes:
   Antibody:
     attributes:
       antibody:
+        identifier : true
         required: true
         range: string
       antibody_identifier:

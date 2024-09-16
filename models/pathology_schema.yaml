@@ -11,10 +11,10 @@ imports:
   - https://linkml.io/linkml-model/linkml_model/model/schema/types
 
 classes:
-
   Pathology:
     attributes:
       pathology:
+        identifier : true
         required: true
         range: string
       pathology_identifier:

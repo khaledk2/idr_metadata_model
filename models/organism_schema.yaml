@@ -15,6 +15,7 @@ classes:
       description: An organism part entity.
       attributes:
         organism part:
+          identifier : true
           range: string
           required: true
         organism part identifier:

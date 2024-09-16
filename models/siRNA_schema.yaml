@@ -14,6 +14,7 @@ classes:
   siRNA:
     attributes:
       siRNA_identifier:
+        identifier : true
         required: true
         range: string
       siRNA_pool_identifier:

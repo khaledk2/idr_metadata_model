@@ -29,6 +29,7 @@ classes:
   Image:
     attributes:
       id:
+        identifier : true
         required: true
         range: integer
       name:
