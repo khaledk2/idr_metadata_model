@@ -61,7 +61,7 @@ def process_results(images_results, target_schema):
 
         if (target_schema.lower()=="all" or target_schema.lower()=="organism") and image_.get("Organism"):
             if image_.get("Organism Part"):
-                organismPart_=OrganismPart(organism_part=image_.get("Organism Part"), organism_part_identifier=image_.get("Organism Part Identifier"))
+                organismPart_=OrganismPart(Organism_Part=image_.get("Organism Part"), Organism_Part_Identifier=image_.get("Organism Part Identifier"))
             organism = Organism(organism=image_.get("Organism"), organism_part=[organismPart_])
 
         if (target_schema.lower()=="all" or target_schema.lower()=="phenotype") and image_.get("Phenotype"):
@@ -74,7 +74,7 @@ def process_results(images_results, target_schema):
         if (target_schema.lower()=="all" or target_schema.lower()=="protein") and image_.get("Protein URL"):
             protein=Protein(Protein=image_.get("Protein"), Protein_URL=image_.get("Protein URL"))
 
-        image_obj=Image(id=image.get("id"), name=image.get("name"), organism=organism,pathology=pathology, phenotype=phenotype, compound=compound, cell_line=cellLine, protein=protein)
+        image_obj=Image(id=image.get("id"), name=image.get("name"), organisms=organism,pathology=pathology, phenotype=phenotype, compound=compound, cell_line=cellLine, protein=protein)
 
         img_dict=json.loads(json_dumper.dumps(image_obj))
         del img_dict['@type']

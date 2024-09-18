@@ -13,16 +13,16 @@ imports:
 classes:
     Phenotype :
         attributes :
-            phenotype :
+            Phenotype :
                 identifier : true
                 required : true
                 range : string
-            phenotype_term_name :
+            Phenotype Term Name :
                 required : true
                 range : string
-            phenotype_term_accession :
+            Phenotype Term Accession :
                 required : false
                 range : string
-            phenotype_term_accession_url :
+            Phenotype Term Accession URL :
                 required : false
                 range : uri

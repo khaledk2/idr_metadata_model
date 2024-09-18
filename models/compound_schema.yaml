@@ -17,6 +17,6 @@ classes:
         identifier : true
         required: true
         range: string
-      compound_name_url:
+      Compound Name URL:
         required: true
         range: uri

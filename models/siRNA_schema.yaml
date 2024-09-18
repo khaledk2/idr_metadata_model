@@ -13,10 +13,10 @@ imports:
 classes:
   siRNA:
     attributes:
-      siRNA_identifier:
+      siRNA Identifier:
         identifier : true
         required: true
         range: string
-      siRNA_pool_identifier:
+      siRNA Pool Identifier:
         required: false
         range: string

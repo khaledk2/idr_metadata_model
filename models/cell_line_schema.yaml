@@ -11,12 +11,12 @@ imports:
   - https://linkml.io/linkml-model/linkml_model/model/schema/types
 
 classes:
-  Cell_line:
+  Cell line:
     attributes:
-      cell_lines:
+      Cell lines:
         identifier : true
         range: string
         required: true
-      cell_lines_supplementary:
+      Cell Lines Supplementary:
         range: string
         required: false

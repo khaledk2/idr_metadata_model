@@ -13,10 +13,10 @@ imports:
 classes:
   Pathology:
     attributes:
-      pathology:
+      Pathology:
         identifier : true
         required: true
         range: string
-      pathology_identifier:
+      Pathology Identifier:
         required: true
         range: string

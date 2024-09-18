@@ -35,7 +35,7 @@ classes:
       name:
         required: true
         range: string
-      organism:
+      organisms:
         required: false
         range: Organism
       gene:
@@ -59,9 +59,9 @@ classes:
         required: false
         range: siRNA
         multivalued: true
-      cell_line:
+      cell line:
         required: false
-        range: Cell_line
+        range: Cell line
       protein:
         required: false
         range: Protein

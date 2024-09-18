@@ -9,25 +9,17 @@ default_prefix: linkml
 imports:
   - linkml:types
   - https://linkml.io/linkml-model/linkml_model/model/schema/types
+  - organism_part_schema
 
 classes:
-  Organism_part:
-      description: An organism part entity.
-      attributes:
-        organism part:
-          identifier : true
-          range: string
-          required: true
-        organism part identifier:
-          range: string
-          required: false
   Organism:
-    description: An organism part entity.
+    description: An organism entity.
     attributes:
       organism:
         range: string
         required: true
-      organism_part:
-        range: Organism_part
+        identifier: true
+      organism part:
+        range: Organism Part
         required: false
         multivalued: true

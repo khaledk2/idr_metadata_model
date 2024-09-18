@@ -9,21 +9,15 @@ default_prefix: linkml
 imports:
   - linkml:types
   - https://linkml.io/linkml-model/linkml_model/model/schema/types
-  - organism_schema
-  - gene_schema
-  - phenotype_schema
-  - compound_schema
-  - pathology_schema
-  - antibody_schema
 
 classes:
 
   Antibody:
     attributes:
-      antibody:
-        identifier : true
+      Antibody:
+        identifier: true
         required: true
         range: string
-      antibody_identifier:
+      Antibody Identifier:
         required: true
         range: string
