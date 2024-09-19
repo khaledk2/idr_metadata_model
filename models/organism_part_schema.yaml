@@ -1,0 +1,23 @@
+id: idr.organism_part.schema
+name: organism_part_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for organism
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+  Organism Part:
+      description: An organism part entity.
+      attributes:
+        Organism Part:
+          identifier : true
+          range: string
+          required: true
+        Organism Part Identifier:
+          range: string
+          required: false
