@@ -138,5 +138,3 @@ def query_searchengine(query_data):
     end = datetime.datetime.now()
     return received_results
 
-#received_results=get_results("idr0051")
-#print (received_results)

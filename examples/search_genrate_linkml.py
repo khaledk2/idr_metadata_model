@@ -3,6 +3,7 @@ from utils.generate_validate_json_image_data import (
     get_image_from_single_attribute_qury,
     get_image_data_inside_container,
     validate_data,
+    save_results_file,
     logger)
 
 from utils.query_builder import build_query
@@ -21,7 +22,9 @@ def run_json_query():
         query = json.load(f)
     images_json=build_query(query,"Organism")
     validate_data(images_json)
-    logger.info(len(images_json))
+    save_results_file(images_json)
+    print (len(images_json))
+    print ("DONE!")
 
 
 
@@ -35,6 +38,7 @@ def run_query_container():
     container = "idr0157"
     images_json = get_image_data_inside_container(container)
     validate_data(images_json)
+    save_results_file(images_json)
     logger.info(len(images_json))
 
 def run_query_for_attr_value():
@@ -45,9 +49,12 @@ def run_query_for_attr_value():
     :return:
     '''
 
-    images_json = get_image_from_single_attribute_qury("Organism", "Mus musculus", "organism")
+    images_json = get_image_from_single_attribute_qury("Organism", "Danio rerio", "Organism")
     validate_data(images_json)
-    logger.info(len(images_json))
+    save_results_file(images_json)
+    logger.info("Number of generated records: %s"%len(images_json))
 
 
-
+#run_json_query()
+run_query_container()
+#run_query_for_attr_value()

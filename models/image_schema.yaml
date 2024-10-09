@@ -21,7 +21,7 @@ imports:
   - compound_schema
   - pathology_schema
   - antibody_schema
-  - siRNA_schema
+  - sirna_schema
   - cell_line_schema
   - protein_schema
 
@@ -35,7 +35,7 @@ classes:
       name:
         required: true
         range: string
-      organisms:
+      organism:
         required: false
         range: Organism
       gene:

@@ -15,7 +15,7 @@ classes:
   Organism:
     description: An organism entity.
     attributes:
-      organism:
+      Organism:
         range: string
         required: true
         identifier: true

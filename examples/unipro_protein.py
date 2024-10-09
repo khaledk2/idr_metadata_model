@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import datetime
+
 import requests
 import sys
 import json
@@ -7,12 +9,12 @@ from utils.generate_validate_json_image_data import process_results,get_image_fr
 
 
 
-def get_linmkl_for_uniprot_bucket(protein_url):
+def get_linmkl_for_uniprot_bucket(protein_url, validate=False):
     # call the idr and get the protein schema
-    images_json = get_image_from_single_attribute_qury("Protein URL", protein_url, "protein")
-    validate_data(images_json)
+    images_json = get_image_from_single_attribute_qury("Protein URL", protein_url, "Protein")
+    if validate:
+        validate_data(images_json)
     print(len(images_json))
-    #print (images_json)
     return images_json
 
 
@@ -44,8 +46,12 @@ def determine_uniprot_images():
     for protein, images in all_results.items():
         for image in images:
             print(f"{image},{protein},https://idr.openmicroscopy.org/webgateway/render_thumbnail/{image}/")
+            break
+        break
 
 #https://idr.openmicroscopy.org/webgateway/render_thumbnail/12805109/
-images_json=get_linmkl_for_uniprot_bucket("https://www.uniprot.org/uniprot/q15907")
+images_json=get_linmkl_for_uniprot_bucket("https://www.uniprot.org/uniprot/q15907",validate=True)
 print (json.dumps(images_json, indent=2))
 print(len(images_json))
+
+#determine_uniprot_images()

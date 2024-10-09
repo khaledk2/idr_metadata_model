@@ -23,6 +23,3 @@ classes:
       gene_identifier_url :
         required : true
         range : uri
-      organism :
-        required : false
-        range : Organism

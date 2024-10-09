@@ -1,5 +1,5 @@
 # Auto generated from image_schema.yaml by pythongen.py version: 0.0.1
-# Generation date: 2024-09-18T23:45:47
+# Generation date: 2024-10-09T00:11:59
 # Schema: image_idr_schema
 #
 # id: idr.image.schema
@@ -93,7 +93,7 @@ class Image(YAMLRoot):
 
     id: Union[int, ImageId] = None
     name: str = None
-    organisms: Optional[Union[str, OrganismOrganism]] = None
+    organism: Optional[Union[str, OrganismOrganism]] = None
     gene: Optional[Union[str, GeneGeneSymbol]] = None
     phenotype: Optional[Union[str, PhenotypePhenotype]] = None
     compound: Optional[Union[str, CompoundCompoundName]] = None
@@ -114,8 +114,8 @@ class Image(YAMLRoot):
         if not isinstance(self.name, str):
             self.name = str(self.name)
 
-        if self.organisms is not None and not isinstance(self.organisms, OrganismOrganism):
-            self.organisms = OrganismOrganism(self.organisms)
+        if self.organism is not None and not isinstance(self.organism, OrganismOrganism):
+            self.organism = OrganismOrganism(self.organism)
 
         if self.gene is not None and not isinstance(self.gene, GeneGeneSymbol):
             self.gene = GeneGeneSymbol(self.gene)
@@ -159,14 +159,14 @@ class Organism(YAMLRoot):
     class_name: ClassVar[str] = "Organism"
     class_model_uri: ClassVar[URIRef] = LINKML.Organism
 
-    organism: Union[str, OrganismOrganism] = None
+    Organism: Union[str, OrganismOrganism] = None
     organism_part: Optional[Union[Union[str, OrganismPartOrganismPart], List[Union[str, OrganismPartOrganismPart]]]] = empty_list()
 
     def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        if self._is_empty(self.organism):
-            self.MissingRequiredField("organism")
-        if not isinstance(self.organism, OrganismOrganism):
-            self.organism = OrganismOrganism(self.organism)
+        if self._is_empty(self.Organism):
+            self.MissingRequiredField("Organism")
+        if not isinstance(self.Organism, OrganismOrganism):
+            self.Organism = OrganismOrganism(self.Organism)
 
         if not isinstance(self.organism_part, list):
             self.organism_part = [self.organism_part] if self.organism_part is not None else []
@@ -187,7 +187,6 @@ class Gene(YAMLRoot):
     gene_symbol: Union[str, GeneGeneSymbol] = None
     gene_identifier: str = None
     gene_identifier_url: Union[str, URI] = None
-    organism: Optional[Union[str, OrganismOrganism]] = None
 
     def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
         if self._is_empty(self.gene_symbol):
@@ -204,9 +203,6 @@ class Gene(YAMLRoot):
             self.MissingRequiredField("gene_identifier_url")
         if not isinstance(self.gene_identifier_url, URI):
             self.gene_identifier_url = URI(self.gene_identifier_url)
-
-        if self.organism is not None and not isinstance(self.organism, OrganismOrganism):
-            self.organism = OrganismOrganism(self.organism)
 
         super().__post_init__(**kwargs)
 
@@ -439,8 +435,8 @@ slots.image__id = Slot(uri=LINKML.id, name="image__id", curie=LINKML.curie('id')
 slots.image__name = Slot(uri=LINKML.name, name="image__name", curie=LINKML.curie('name'),
                    model_uri=LINKML.image__name, domain=None, range=str)
 
-slots.image__organisms = Slot(uri=LINKML.organisms, name="image__organisms", curie=LINKML.curie('organisms'),
-                   model_uri=LINKML.image__organisms, domain=None, range=Optional[Union[str, OrganismOrganism]])
+slots.image__organism = Slot(uri=LINKML.organism, name="image__organism", curie=LINKML.curie('organism'),
+                   model_uri=LINKML.image__organism, domain=None, range=Optional[Union[str, OrganismOrganism]])
 
 slots.image__gene = Slot(uri=LINKML.gene, name="image__gene", curie=LINKML.curie('gene'),
                    model_uri=LINKML.image__gene, domain=None, range=Optional[Union[str, GeneGeneSymbol]])
@@ -466,8 +462,8 @@ slots.image__cell_line = Slot(uri=LINKML.cell_line, name="image__cell_line", cur
 slots.image__protein = Slot(uri=LINKML.protein, name="image__protein", curie=LINKML.curie('protein'),
                    model_uri=LINKML.image__protein, domain=None, range=Optional[Union[str, ProteinProtein]])
 
-slots.organism__organism = Slot(uri=LINKML.organism, name="organism__organism", curie=LINKML.curie('organism'),
-                   model_uri=LINKML.organism__organism, domain=None, range=URIRef)
+slots.organism__Organism = Slot(uri=LINKML.Organism, name="organism__Organism", curie=LINKML.curie('Organism'),
+                   model_uri=LINKML.organism__Organism, domain=None, range=URIRef)
 
 slots.organism__organism_part = Slot(uri=LINKML.organism_part, name="organism__organism_part", curie=LINKML.curie('organism_part'),
                    model_uri=LINKML.organism__organism_part, domain=None, range=Optional[Union[Union[str, OrganismPartOrganismPart], List[Union[str, OrganismPartOrganismPart]]]])
@@ -480,9 +476,6 @@ slots.gene__gene_identifier = Slot(uri=LINKML.gene_identifier, name="gene__gene_
 
 slots.gene__gene_identifier_url = Slot(uri=LINKML.gene_identifier_url, name="gene__gene_identifier_url", curie=LINKML.curie('gene_identifier_url'),
                    model_uri=LINKML.gene__gene_identifier_url, domain=None, range=Union[str, URI])
-
-slots.gene__organism = Slot(uri=LINKML.organism, name="gene__organism", curie=LINKML.curie('organism'),
-                   model_uri=LINKML.gene__organism, domain=None, range=Optional[Union[str, OrganismOrganism]])
 
 slots.phenotype__Phenotype = Slot(uri=LINKML.Phenotype, name="phenotype__Phenotype", curie=LINKML.curie('Phenotype'),
                    model_uri=LINKML.phenotype__Phenotype, domain=None, range=URIRef)

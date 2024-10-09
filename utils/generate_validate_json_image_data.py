@@ -6,8 +6,13 @@ Then it will get the json from the objects and validate it using the schema mode
 This script is still in progress
 '''
 
-from models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound, Protein
+from models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound, Protein, CellLine, SiRNA, OrganismOrganism
+from utils.get_schema_attributes import get_included_schema_classes, get_schema_class_attribut
 
+schema_classes={"Image":Image, "Organism Part":OrganismPart, "Organism":Organism, "Phenotype":Phenotype,
+         "Compound":Compound, "Protein":Protein,"Cell line":CellLine,"siRNA":SiRNA}
+
+from utils.get_schema_attributes import get_schema_attributes
 import sys
 import logging
 import json
@@ -41,57 +46,77 @@ def get_image_data_inside_container(container,target_schema="all"):
     images_results=get_results(container)
     return (process_results(images_results,target_schema))
 
+
+def extract_schema_data(image, all_attributes, target_schema):
+    records={}
+    if target_schema in all_attributes:
+        main_schema_attributes=all_attributes[target_schema]
+    else:
+        main_schema_attributes=get_schema_attributes((target_schema))
+        all_attributes[target_schema]=main_schema_attributes
+    for main_schema, atts in main_schema_attributes.items():
+        for atr in atts:
+            if atr.get("range") in ["string", "uri","integer"]:
+                if image.get(atr.get("name")):
+                    records[atr.get("name")]=image.get(atr.get("name"))
+            else:
+                records[atr.get("name")] = extract_schema_data(image, all_attributes, atr.get("range"))
+    return records
+
+
 def process_results(images_results, target_schema):
-    images_json=[]
+    images_json = []
+    if target_schema.lower() == "all":
+        target_schema = "Image"
+    all_attributes={}
+    print (target_schema)
+    print ("########################")
+    all_attributes[target_schema]=get_schema_attributes(target_schema)
+    included_schema_classes = get_included_schema_classes(target_schema)
+    for sub_schem in included_schema_classes:
+        all_attributes[sub_schem]=get_schema_attributes(sub_schem)
+    print (included_schema_classes)
+
     for image in images_results:
-        '''
-        Now, it is only supports organism, pathology and phenotype
-        Work is in progress to support other classes        
-        '''
-        image_=convert_to_key_value(image)
-        organism=None
-        pathology= None
-        phenotype=None
-        compound= None
-        cellLine=None
-        organismPart_=None
-        protein=None
-        if target_schema.lower()=="all" or target_schema.lower()=="organism":
-            pass
+        image_ = convert_to_key_value(image)
+        attrs=extract_schema_data(image_,all_attributes,target_schema)
+        if target_schema!="Image":
+            img_dict = {"id": image.get("id"), "name":image.get("name"),target_schema.lower(): attrs}
+        else:
+            img_dict = attrs
+            img_dict["id"]=image.get("id")
+            img_dict["name"]=image.get("name")
 
-        if (target_schema.lower()=="all" or target_schema.lower()=="organism") and image_.get("Organism"):
-            if image_.get("Organism Part"):
-                organismPart_=OrganismPart(Organism_Part=image_.get("Organism Part"), Organism_Part_Identifier=image_.get("Organism Part Identifier"))
-            organism = Organism(organism=image_.get("Organism"), organism_part=[organismPart_])
 
-        if (target_schema.lower()=="all" or target_schema.lower()=="phenotype") and image_.get("Phenotype"):
-            phenotype=Phenotype(phenotype=image_.get("Phenotype"), phenotype_term_name=image_.get("Phenotype Term Name"),
-                                phenotype_term_accession=image_.get("Phenotype Term Accession"),phenotype_term_accession_url=image_.get("Phenotype Term Accession URL"))
-
-        if (target_schema.lower()=="all" or target_schema.lower()=="compound name") and image_.get("Compound Name"):
-            compound=Compound(compound_name=image_.get("Compound Name"), compound_name_url=image_.get("Compound Name URL"))
-
-        if (target_schema.lower()=="all" or target_schema.lower()=="protein") and image_.get("Protein URL"):
-            protein=Protein(Protein=image_.get("Protein"), Protein_URL=image_.get("Protein URL"))
-
-        image_obj=Image(id=image.get("id"), name=image.get("name"), organisms=organism,pathology=pathology, phenotype=phenotype, compound=compound, cell_line=cellLine, protein=protein)
-
-        img_dict=json.loads(json_dumper.dumps(image_obj))
-        del img_dict['@type']
+        #img_dict = json_dumper(json_dumper(image_obj))
+        #del img_dict['@type']
         images_json.append(img_dict)
+        ## clean the data
+        to_be_deleted=[]
+        for item, itev in img_dict.items():
+            try:
+                if len(itev)==0:
+                    to_be_deleted.append(item)
+            except:
+                pass
+        for it in to_be_deleted:
+            del img_dict[it]
+
     return images_json
 
-def validate_data (images_json):
-    schema_file = os.path.join(sys.path[1], "models/image_schema.yaml")
-    os.chdir(os.path.join(sys.path[1], "models"))
-    logger.info("Loading schema from %s" % schema_file)
-    for data in images_json:
-        report = validate(data, schema_file, "Image")
-        if not report.results:
-            logger.info('The image data with id=%s is valid!'%data.get("id"))
-        else:
-            for result in report.results:
-                logger.error(result.message)
 
 
 
+def validate_data(images_json, target_schema="Image"):
+    for image_json in images_json:
+        try:
+            image = Image(**image_json)  # This will raise an error if validation fails
+            logger.info('Valid data!, the image data with id=%s, and name %s is valid.' %(image_json.get("id"), image_json.get("name")))
+        except Exception as e:
+            print("Validation failed for image, id: %s, error message is: %s"%(image_json.get("id"),e))
+
+
+
+def save_results_file(results, file_name="results.json"):
+    with open(file_name, "w") as outfile:
+        outfile.write(json.dumps(results, indent=4))
