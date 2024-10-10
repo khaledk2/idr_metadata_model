@@ -28,20 +28,19 @@ def run_json_query():
 
 
 
-def run_query_container():
+def run_query_container(container):
     '''
     Return the data inside a container (project or screen)
     It will return a complete image schema
     The user can set the target schema then it will limit the results to this schema
     :return:
     '''
-    container = "idr0157"
     images_json = get_image_data_inside_container(container)
     validate_data(images_json)
     save_results_file(images_json)
     logger.info(len(images_json))
 
-def run_query_for_attr_value():
+def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Image"):
     '''
     Query using attibute name and value
     Limit the returned results to contain only organism classes
@@ -49,12 +48,13 @@ def run_query_for_attr_value():
     :return:
     '''
 
-    images_json = get_image_from_single_attribute_qury("Organism", "Danio rerio", "Organism")
+    images_json = get_image_from_single_attribute_qury(attribute_name, attribute_value, target_schema)
     validate_data(images_json)
     save_results_file(images_json)
     logger.info("Number of generated records: %s"%len(images_json))
+    print(images_json[0])
 
 
 #run_json_query()
-run_query_container()
-#run_query_for_attr_value()
+run_query_container("idr0157")
+#run_query_for_attr_value("Organism", "Danio rerio", "All")

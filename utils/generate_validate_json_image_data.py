@@ -64,7 +64,7 @@ def extract_schema_data(image, all_attributes, target_schema):
     return records
 
 
-def process_results(images_results, target_schema):
+def process_results(images_results, target_schema="Image"):
     images_json = []
     if target_schema.lower() == "all":
         target_schema = "Image"
