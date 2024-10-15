@@ -1,12 +1,9 @@
 #!/usr/bin/env python
-import datetime
 
 import requests
-import sys
 import json
-from utils.idr_connector import get_query_results
-from utils.generate_validate_json_image_data import process_results,get_image_from_single_attribute_qury, validate_data
-
+from idrmetadatamodels.utils.idr_connector import get_query_results
+from idrmetadatamodels.utils.generate_validate_json_image_data import get_image_from_single_attribute_qury, validate_data
 
 
 def get_linmkl_for_uniprot_bucket(protein_url, validate=False):

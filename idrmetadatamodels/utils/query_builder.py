@@ -1,9 +1,8 @@
 import sys
 import os
 from linkml.validator import validate
-from utils.idr_connector import get_results, get_query_results,query_searchengine
-from utils.generate_validate_json_image_data import logger, process_results, validate_data
-
+from idrmetadatamodels.utils.idr_connector import query_searchengine
+from idrmetadatamodels.utils.generate_validate_json_image_data import logger, process_results
 
 schema_names={
         "organism":"organism_schema",

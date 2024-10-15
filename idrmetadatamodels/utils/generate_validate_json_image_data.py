@@ -6,25 +6,21 @@ Then it will get the json from the objects and validate it using the schema mode
 This script is still in progress
 '''
 
-from models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound, Protein, CellLine, SiRNA, OrganismOrganism
-from utils.get_schema_attributes import get_included_schema_classes, get_schema_class_attribut
+from idrmetadatamodels.models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound, Protein, CellLine, SiRNA
+from idrmetadatamodels.utils.get_schema_attributes import get_included_schema_classes
 
 schema_classes={"Image":Image, "Organism Part":OrganismPart, "Organism":Organism, "Phenotype":Phenotype,
          "Compound":Compound, "Protein":Protein,"Cell line":CellLine,"siRNA":SiRNA}
 
-from utils.get_schema_attributes import get_schema_attributes
-import sys
+from idrmetadatamodels.utils.get_schema_attributes import get_schema_attributes
 import logging
 import json
-import os
-from linkml_runtime.dumpers import json_dumper
-from linkml.validator import validate
 
-logger=logging.getLogger("idr_metadata_model")
+logger=logging.getLogger("idr-metadata-model")
 
 logger.setLevel(logging.INFO)
 
-from utils.idr_connector import get_results, get_query_results
+from idrmetadatamodels.utils.idr_connector import get_results, get_query_results
 
 muti_values=[""]
 def convert_to_key_value(json_ob):

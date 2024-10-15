@@ -31,7 +31,10 @@ def get_included_schema_classes(schema_class_name):
 
 def get_schema_class_attribut(schema_class_name):
     schema_attributes = {}
-    schema_path = "../models/%s_schema.yaml" % schema_class_name.lower().replace(" ","_")
+
+    path_s=os.path.dirname(os.path.realpath(__file__)).replace("utils","models")
+
+    schema_path = "%s/%s_schema.yaml" % (path_s,schema_class_name.lower().replace(" ","_"))
     if not os.path.isfile((schema_path)):
         print("No schema file %s is found for %s" % (schema_path,schema_class_name))
         return schema_attributes
@@ -56,7 +59,9 @@ def get_schema_class_attribut(schema_class_name):
 
 def get_schema_attributes(class_name):
     # Load your schema file
-    schema_path = "../models/image_schema.yaml"
+    path_s = os.path.dirname(os.path.realpath(__file__)).replace("utils", "models")
+    schema_path = "%s/image_schema.yaml" % path_s
+    #schema_path = "../idrmetadatamodels/models/image_schema.yaml"
     schema_view = SchemaView(schema_path)
 
     # Get the class definition

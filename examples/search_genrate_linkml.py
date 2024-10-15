@@ -1,12 +1,11 @@
-
-from utils.generate_validate_json_image_data import (
+from  idrmetadatamodels.utils.generate_validate_json_image_data import (
     get_image_from_single_attribute_qury,
     get_image_data_inside_container,
     validate_data,
     save_results_file,
     logger)
 
-from utils.query_builder import build_query
+from idrmetadatamodels.utils.query_builder import build_query
 import json
 
 def run_json_query():
@@ -53,7 +52,6 @@ def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Im
     save_results_file(images_json)
     logger.info("Number of generated records: %s"%len(images_json))
     print(images_json[0])
-
 
 #run_json_query()
 run_query_container("idr0157")
