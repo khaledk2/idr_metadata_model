@@ -4,11 +4,11 @@ version = "0.1"
 description = "Idr Metadata Model package"
 readme = "README.md"
 requires-python = ">=3.9"
+license = {file = "LICENSES.txt"}
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
-
 [project.urls]
 Homepage = "https://github.com/khaledk2/idr_metadata_model"
 Issues = "https://github.com/khaledk2/idr_metadata_model/issues"
