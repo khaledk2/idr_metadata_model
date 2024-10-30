@@ -23,20 +23,19 @@ Some usefull commands:
 
 Verify the schema:
 
-         linkml-validate -s  models/image_schema.yaml 
+         linkml-validate -s  idrmetadatamodels/models/image_schema.yaml 
 
 Generate a python code for the model:
 
-        gen-python models/image_schema.yaml  --genmeta  > models/image_schema.py
+        gen-python idrmetadatamodels/models/image_schema.yaml  --genmeta  > idrmetadatamodels/models/image_schema.py
 
 Generate class diagram
 
-        gen-plantuml models/image_schema.yaml > models/image.puml
+        gen-plantuml idrmetadatamodels/models/image_schema.yaml > idrmetadatamodels/models/image.puml
 
 Generate png image
 
-        plantuml  models/image.puml
-
+        plantuml  idrmetadatamodels/models/image.puml
 
 
 
