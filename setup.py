@@ -39,7 +39,7 @@ setup(
     "linkml-runtime==1.8.0"
     ],
     include_package_data=True,
-    license = "GPL v3.0",
+    license = "Apache-2.0",
 
 )
 
