@@ -54,5 +54,5 @@ def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Im
     print(images_json[0])
 
 #run_json_query()
-run_query_container("idr0157")
-#run_query_for_attr_value("Organism", "Danio rerio", "All")
+#run_query_container("idr0157")
+run_query_for_attr_value("Organism", "Danio rerio", "Image")

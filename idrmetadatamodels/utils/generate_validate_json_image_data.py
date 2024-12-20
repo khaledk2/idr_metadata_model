@@ -5,6 +5,7 @@ It will handle the data and create the objects from the generated python code (g
 Then it will get the json from the objects and validate it using the schema model
 This script is still in progress
 '''
+from jsonpath_ng.bin.jsonpath import print_matches
 
 from idrmetadatamodels.models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound, Protein, CellLine, SiRNA
 from idrmetadatamodels.utils.get_schema_attributes import get_included_schema_classes
@@ -25,9 +26,15 @@ from idrmetadatamodels.utils.idr_connector import get_results, get_query_results
 muti_values=[""]
 def convert_to_key_value(json_ob):
     objects={}
-    for lst in json_ob.get("key_values"):
-        if type(lst) is dict:
-                objects[lst.get("name")]=lst.get("value")
+    for key, item in json_ob.items():
+        if key == "key_values":
+            for lst in item: #json_ob.get("key_values"):
+                if type(lst) is dict:
+                        objects[lst.get("name")]=lst.get("value")
+        #else:
+        #    objects[key]=item
+
+
     return objects
 
 def get_image_data_for_schema():
@@ -35,8 +42,12 @@ def get_image_data_for_schema():
 
 def get_image_from_single_attribute_qury(attr, value, target_schema="all", container_name=None):
     images_results=get_query_results(attr, value, container_name)
-    return (process_results(images_results,target_schema))
-
+    import os
+    schema_path=None
+    if os.path.isfile(target_schema):
+        schema_path=target_schema
+        target_schema=os.path.basename(target_schema).replace(".yaml", "")
+    return (process_results(images_results,target_schema,schema_path))
 
 def get_image_data_inside_container(container,target_schema="all"):
     images_results=get_results(container)
@@ -60,18 +71,15 @@ def extract_schema_data(image, all_attributes, target_schema):
     return records
 
 
-def process_results(images_results, target_schema="Image"):
+def process_results(images_results, target_schema="Image", schema_path=None):
     images_json = []
     if target_schema.lower() == "all":
         target_schema = "Image"
     all_attributes={}
-    print (target_schema)
-    print ("########################")
-    all_attributes[target_schema]=get_schema_attributes(target_schema)
-    included_schema_classes = get_included_schema_classes(target_schema)
+    all_attributes[target_schema]=get_schema_attributes(target_schema,schema_path)
+    included_schema_classes = get_included_schema_classes(target_schema, schema_path)
     for sub_schem in included_schema_classes:
         all_attributes[sub_schem]=get_schema_attributes(sub_schem)
-    print (included_schema_classes)
 
     for image in images_results:
         image_ = convert_to_key_value(image)
@@ -111,6 +119,48 @@ def validate_data(images_json, target_schema="Image"):
         except Exception as e:
             print("Validation failed for image, id: %s, error message is: %s"%(image_json.get("id"),e))
 
+
+def create_schema_class_run_time(schema_path):
+    import subprocess, os
+    class_name = os.path.basename(schema_path).replace(".yaml", "")
+    schema_folder=os.path.dirname(schema_path)
+    class_path = os.path.join(schema_folder,"%s.py"%class_name )
+    command = "gen-python %s --genmeta > %s" % (schema_path, class_path)
+    proc = subprocess.run(command, shell=True, capture_output=True, text=True)
+    print("Output: ", proc.stdout)
+    print("Error:  ", proc.stderr)
+    with open(class_path, "r") as f:
+        lines = f.readlines()
+    with open(class_path, "w") as f:
+        for line in lines:
+            if "from .types import String" not in line:
+                f.write(line)
+    return class_path
+
+def validate_data_run_time(images_json, class_path):
+    #from data.Biosample import Biosample
+    with open(class_path, 'r') as file:
+        class_code = file.read()
+
+    # Execute the class definition
+    exec(class_code, globals())
+    import os
+    schema_class_name = os.path.basename(class_path).replace(".py", "")
+    Schema_class = globals().get(schema_class_name)
+    for image_json in images_json:
+        try:
+            class_data=image_json.get(schema_class_name.lower())
+            if class_data:
+                modified_class={}
+                for key, value in class_data.items():
+                    modified_class[key.replace(" ","_")]=value
+                schema_class = Schema_class(**modified_class)  # This will raise an error if validation fails
+                logger.info('Valid data!, the image data with id=%s, and name %s is valid.' %(image_json.get("id"), image_json.get("name")))
+            else:
+                logger.info('No valid data is found the image data with id=%s, and name %s is not found.' % (
+                image_json.get("id"), image_json.get("name")))
+        except Exception as e:
+            print("Validation failed for image, id: %s, error message is: %s"%(image_json.get("id"),e))
 
 
 def save_results_file(results, file_name="results.json"):
