@@ -1,16 +1,15 @@
 id: idr.study.schema
-name: image_idr_schema
+name: study_idr_schema
 description: A LinkML schema translated from the idr key-value pairs for study
 
 prefixes:
   linkml: https://w3id.org/linkml/
 
 default_prefix: linkml
-
 imports:
   - linkml:types
   - https://linkml.io/linkml-model/linkml_model/model/schema/types
-  - licence_schema
+  - license_schema
   - publication_schema
 
 classes:
@@ -19,38 +18,43 @@ classes:
     attributes:
       id:
         identifier: true
+        required: true
         description: The unique identifier for a study.
         range: integer
-      imaging_method:
+      name:
+        required: true
+        description: The unique identifier for a study.
+        range: string
+      Imaging Method:
         description: Imaging Method
         range: string
-        required: true
+        required: false
+      Study Type:
+        description: The study type
+        range: string
+        required: false
+      Data Publisher:
+        description: The study publisher, e.g. idr
+        range: string
+        required: false
+      Sample Type:
+        description: sample type
+        range: string
+        required: false
+      Organism:
+        description: sample organism
+        range: string
+        required: false
+      Release Date:
+        #range: date
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+        required: false
+      license:
+        description: The study license
+        range: License
+        required: false
       publication:
         description: The publication for a study.
         range: Publication
         required: false
-      study_type:
-        description: The study type
-        range: string
-        required: true
-      license:
-        description: The study license
-        range: License
-        required: true
-      data_publisher:
-        description: The study publisher, e.g. idr
-        range: string
-        required: true
-      sample_type:
-        description: sample type
-        range: string
-        required: false
-      organism:
-        description: sample organism
-        range: string
-        required: false
-      release_date:
-        #range: date
-        range: string
-        pattern: "^\\d{4}-\\d{2}-\\d{2}$"
-        required: true

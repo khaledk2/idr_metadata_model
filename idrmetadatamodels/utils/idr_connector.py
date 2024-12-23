@@ -9,9 +9,12 @@ import logging
 import json
 import requests
 import sys
+from string import Template
 
 
-submit_query_url ="https://idr.openmicroscopy.org/searchengine/api/v1/resources/submitquery/"
+#submit_query_url ="https://idr-testing.openmicroscopy.org/searchengine2/api/v1/resources/submitquery/"
+#submit_query_url ="https://idr.openmicroscopy.org/searchengine/api/v1/resources/submitquery/containers"
+submit_query_url =Template('''https://idr.openmicroscopy.org/searchengine/api/v1/resources/$resource_type/searchannotation/''')
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -41,6 +44,7 @@ def get_current_page_bookmark(pagination_dict):
 
 def call_omero_searchengine_return_results(url, data=None, method="post",):
     global page, total_pages, pagination_dict, next_page
+
     if method == "post":
         resp = requests.post(url, data=data)
     else:
@@ -75,14 +79,14 @@ def call_omero_searchengine_return_results(url, data=None, method="post",):
     except Exception as ex:
         logging.info("Error: %s" % ex)
 
-def get_query_results(re_attribute, value, container_name=None):
+def get_query_results(re_attribute, value, container_name=None, resource="image"):
     rest_variables()
     and_filters = [
         {
             "name": re_attribute,
             "value": value,  # "idr0051", #"idr0157",
             "operator": "equals",
-            "resource": "image"
+            "resource": resource
         },
     ]
     if container_name:
@@ -94,10 +98,11 @@ def get_query_results(re_attribute, value, container_name=None):
         })
 
     query_data = {"query_details": {"and_filters": and_filters}}
-    return query_searchengine(query_data)
+    return query_searchengine(query_data, resource)
 
 def get_results(container_name):
     start = datetime.datetime.now()
+
     and_filters = [
         {
             "name": "name",
@@ -108,12 +113,15 @@ def get_results(container_name):
     ]
 
     query_data = {"query_details": {"and_filters": and_filters}}
-    return query_searchengine(query_data)
-def query_searchengine(query_data):
+    return query_searchengine(query_data, resource)
 
+def query_searchengine(query_data, resource):
+    submit_query_url_ = submit_query_url.substitute(resource_type=resource)
+    print (submit_query_url_)
+    print ("=======================>>>>")
     query_data_json = json.dumps(query_data)
     bookmark, total_results = call_omero_searchengine_return_results(
-        submit_query_url, data=query_data_json
+        submit_query_url_, data=query_data_json
     )
     logging.info(
         "page: %s, / %s received results: %s / %s"
@@ -128,7 +136,7 @@ def query_searchengine(query_data):
         query_data_json_ = json.dumps(query_data_)
 
         bookmark, total_results = call_omero_searchengine_return_results(
-            submit_query_url, data=query_data_json_
+            submit_query_url_, data=query_data_json_
         )
 
         logging.info(
@@ -136,5 +144,6 @@ def query_searchengine(query_data):
             % (bookmark, page, total_pages, len(received_results), total_results)
         )
     end = datetime.datetime.now()
+
     return received_results
 

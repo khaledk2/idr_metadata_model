@@ -8,6 +8,7 @@ This script is still in progress
 from jsonpath_ng.bin.jsonpath import print_matches
 
 from idrmetadatamodels.models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound, Protein, CellLine, SiRNA
+from idrmetadatamodels.models.study_schema import Study, License, Publication
 from idrmetadatamodels.utils.get_schema_attributes import get_included_schema_classes
 
 schema_classes={"Image":Image, "Organism Part":OrganismPart, "Organism":Organism, "Phenotype":Phenotype,
@@ -40,14 +41,15 @@ def convert_to_key_value(json_ob):
 def get_image_data_for_schema():
     pass
 
-def get_image_from_single_attribute_qury(attr, value, target_schema="all", container_name=None):
-    images_results=get_query_results(attr, value, container_name)
+def get_resource_from_single_attribute_qury(attr, value, target_schema="all", container_name=None, resource="image"):
+    resources_results=get_query_results(attr, value, container_name,resource)
+    print(resources_results[0])
     import os
     schema_path=None
     if os.path.isfile(target_schema):
         schema_path=target_schema
         target_schema=os.path.basename(target_schema).replace(".yaml", "")
-    return (process_results(images_results,target_schema,schema_path))
+    return (process_results(resources_results,target_schema,schema_path))
 
 def get_image_data_inside_container(container,target_schema="all"):
     images_results=get_results(container)
@@ -59,7 +61,7 @@ def extract_schema_data(image, all_attributes, target_schema):
     if target_schema in all_attributes:
         main_schema_attributes=all_attributes[target_schema]
     else:
-        main_schema_attributes=get_schema_attributes((target_schema))
+        main_schema_attributes=get_schema_attributes(target_schema)
         all_attributes[target_schema]=main_schema_attributes
     for main_schema, atts in main_schema_attributes.items():
         for atr in atts:
@@ -71,8 +73,8 @@ def extract_schema_data(image, all_attributes, target_schema):
     return records
 
 
-def process_results(images_results, target_schema="Image", schema_path=None):
-    images_json = []
+def process_results(resource_results, target_schema="Image", schema_path=None):
+    resource_json = []
     if target_schema.lower() == "all":
         target_schema = "Image"
     all_attributes={}
@@ -81,44 +83,43 @@ def process_results(images_results, target_schema="Image", schema_path=None):
     for sub_schem in included_schema_classes:
         all_attributes[sub_schem]=get_schema_attributes(sub_schem)
 
-    for image in images_results:
-        image_ = convert_to_key_value(image)
-        attrs=extract_schema_data(image_,all_attributes,target_schema)
-        if target_schema!="Image":
-            img_dict = {"id": image.get("id"), "name":image.get("name"),target_schema.lower(): attrs}
+    for res_rcord in resource_results:
+        resource_ = convert_to_key_value(res_rcord)
+        attrs=extract_schema_data(resource_,all_attributes,target_schema)
+
+        if target_schema and target_schema.lower()!="image" and target_schema.lower()!="study":
+            res_dict = {"id": res_rcord.get("id"), "name":res_rcord.get("name"),target_schema.lower(): attrs}
         else:
-            img_dict = attrs
-            img_dict["id"]=image.get("id")
-            img_dict["name"]=image.get("name")
+            res_dict = attrs
+            res_dict["id"]=res_rcord.get("id")
+            res_dict["name"]=res_rcord.get("name")
 
 
         #img_dict = json_dumper(json_dumper(image_obj))
         #del img_dict['@type']
-        images_json.append(img_dict)
+        resource_json.append(res_dict)
         ## clean the data
         to_be_deleted=[]
-        for item, itev in img_dict.items():
+        for item, itev in res_dict.items():
             try:
                 if len(itev)==0:
                     to_be_deleted.append(item)
             except:
                 pass
         for it in to_be_deleted:
-            del img_dict[it]
+            del res_dict[it]
 
-    return images_json
+    return resource_json
 
-
-
-
-def validate_data(images_json, target_schema="Image"):
-    for image_json in images_json:
+def validate_data(resource_json, target_schema="Image"):
+    for res_json in resource_json:
+        print (res_json)
         try:
-            image = Image(**image_json)  # This will raise an error if validation fails
-            logger.info('Valid data!, the image data with id=%s, and name %s is valid.' %(image_json.get("id"), image_json.get("name")))
+            res_object = Study(**res_json)  # This will raise an error if validation fails
+            logger.info('Valid data!, the %s  data with id=%s, and name %s is valid.' %(target_schema, res_object.get("id"), res_object.get("name")))
         except Exception as e:
-            print("Validation failed for image, id: %s, error message is: %s"%(image_json.get("id"),e))
-
+            print("Validation failed for %s , id: %s, error message is: %s"%(target_schema,res_json.get("id"),e))
+            print("Validation error is: %s" %e)
 
 def create_schema_class_run_time(schema_path):
     import subprocess, os

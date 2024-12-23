@@ -3,12 +3,12 @@
 import requests
 import json
 from idrmetadatamodels.utils.idr_connector import get_query_results
-from idrmetadatamodels.utils.generate_validate_json_image_data import get_image_from_single_attribute_qury, validate_data
+from idrmetadatamodels.utils.generate_validate_json_image_data import get_resource_from_single_attribute_qury, validate_data
 
 
 def get_linmkl_for_uniprot_bucket(protein_url, validate=False):
     # call the idr and get the protein schema
-    images_json = get_image_from_single_attribute_qury("Protein URL", protein_url, "Protein")
+    images_json = get_resource_from_single_attribute_qury("Protein URL", protein_url, "Protein")
     if validate:
         validate_data(images_json)
     print(len(images_json))
