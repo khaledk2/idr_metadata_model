@@ -12,7 +12,7 @@ import sys
 from string import Template
 
 
-#submit_query_url ="https://idr-testing.openmicroscopy.org/searchengine2/api/v1/resources/submitquery/"
+container_submit_query_url ="https://idr-testing.openmicroscopy.org/searchengine2/api/v1/resources/submitquery/"
 #submit_query_url ="https://idr.openmicroscopy.org/searchengine/api/v1/resources/submitquery/containers"
 submit_query_url =Template('''https://idr.openmicroscopy.org/searchengine/api/v1/resources/$resource_type/searchannotation/''')
 
@@ -98,9 +98,12 @@ def get_query_results(re_attribute, value, container_name=None, resource="image"
         })
 
     query_data = {"query_details": {"and_filters": and_filters}}
-    return query_searchengine(query_data, resource)
+    if container_name:
+        return query_searchengine(query_data, resource, container=True)
+    else:
+        return query_searchengine(query_data, resource)
 
-def get_results(container_name):
+def get_results(container_name, resource="image"):
     start = datetime.datetime.now()
 
     and_filters = [
@@ -113,12 +116,13 @@ def get_results(container_name):
     ]
 
     query_data = {"query_details": {"and_filters": and_filters}}
-    return query_searchengine(query_data, resource)
+    return query_searchengine(query_data, resource, container=True)
 
-def query_searchengine(query_data, resource):
-    submit_query_url_ = submit_query_url.substitute(resource_type=resource)
-    print (submit_query_url_)
-    print ("=======================>>>>")
+def query_searchengine(query_data, resource="image", container=False):
+    if not container:
+        submit_query_url_ = submit_query_url.substitute(resource_type=resource)
+    else:
+        submit_query_url_=container_submit_query_url
     query_data_json = json.dumps(query_data)
     bookmark, total_results = call_omero_searchengine_return_results(
         submit_query_url_, data=query_data_json

@@ -8,6 +8,7 @@ This script is still in progress
 from jsonpath_ng.bin.jsonpath import print_matches
 
 from idrmetadatamodels.models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound, Protein, CellLine, SiRNA
+from idrmetadatamodels.models.screen_study_schema import Study
 from idrmetadatamodels.models.study_schema import Study, License, Publication
 from idrmetadatamodels.utils.get_schema_attributes import get_included_schema_classes
 
@@ -24,6 +25,8 @@ logger.setLevel(logging.INFO)
 
 from idrmetadatamodels.utils.idr_connector import get_results, get_query_results
 
+classes_schema={"Image": Image, "Study": Study}
+
 muti_values=[""]
 def convert_to_key_value(json_ob):
     objects={}
@@ -34,7 +37,6 @@ def convert_to_key_value(json_ob):
                         objects[lst.get("name")]=lst.get("value")
         #else:
         #    objects[key]=item
-
 
     return objects
 
@@ -51,8 +53,8 @@ def get_resource_from_single_attribute_qury(attr, value, target_schema="all", co
         target_schema=os.path.basename(target_schema).replace(".yaml", "")
     return (process_results(resources_results,target_schema,schema_path))
 
-def get_image_data_inside_container(container,target_schema="all"):
-    images_results=get_results(container)
+def get_image_data_inside_container(container,target_schema="all", resource="image"):
+    images_results=get_results(container, resource)
     return (process_results(images_results,target_schema))
 
 
@@ -111,12 +113,22 @@ def process_results(resource_results, target_schema="Image", schema_path=None):
 
     return resource_json
 
+def set_data_for_testing (org_data):
+    new_test={}
+    for key, value in org_data.items():
+        if type(value) is dict:
+            new_test[key.replace(" ", "_")] = set_data_for_testing(value)
+        else:
+            new_test[key.replace(" ", "_")] = value
+    return new_test
+
 def validate_data(resource_json, target_schema="Image"):
     for res_json in resource_json:
-        print (res_json)
         try:
-            res_object = Study(**res_json)  # This will raise an error if validation fails
-            logger.info('Valid data!, the %s  data with id=%s, and name %s is valid.' %(target_schema, res_object.get("id"), res_object.get("name")))
+            test_res_json=set_data_for_testing(res_json)
+            res_class=classes_schema.get(target_schema)
+            res_object = res_class(**test_res_json)  # This will raise an error if validation fails
+            logger.info('Valid data!, the %s  data with id=%s, and name %s is valid.' %(target_schema, res_json.get("id"), res_json.get("name")))
         except Exception as e:
             print("Validation failed for %s , id: %s, error message is: %s"%(target_schema,res_json.get("id"),e))
             print("Validation error is: %s" %e)

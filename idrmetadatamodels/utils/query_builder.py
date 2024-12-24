@@ -24,8 +24,8 @@ Return the idr classes for "Danio rerio" organism and "Tailbud" organism part
 def build_query(query, schema):
         if schema.lower() not in schema_names:
                 return "%s is not supported"%schema
-        schema_file = os.path.join(sys.path[1], "models/%s.yaml" % schema_names[schema.lower()])
-        os.chdir(os.path.join(sys.path[1], "models"))
+        schema_file = os.path.join(sys.path[1], "idrmetadatamodels/models/%s.yaml" % schema_names[schema.lower()])
+        os.chdir(os.path.join(sys.path[1], "idrmetadatamodels/models"))
         logger.info("Loading schema from %s" % schema_file)
         report = validate(query, schema_file, schema)
         if not report.results:
