@@ -10,8 +10,7 @@ import sys
 from jsonpath_ng.bin.jsonpath import print_matches
 
 from idrmetadatamodels.models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound, Protein, CellLine, SiRNA
-from idrmetadatamodels.models.screen_study_schema import Study
-from idrmetadatamodels.models.study_schema import Study, License, Publication
+from idrmetadatamodels.models.study_schema import Study
 from idrmetadatamodels.utils.get_schema_attributes import get_included_schema_classes
 
 schema_classes={"Image":Image, "Organism Part":OrganismPart, "Organism":Organism, "Phenotype":Phenotype,
