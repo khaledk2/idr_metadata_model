@@ -1,0 +1,43 @@
+id: ssbd.genetic.schema
+name: Genetic_ssbd_schema
+description: A LinkML schema for Genetic translated from the https://github.com/openssbd/ssbd-metadata
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+  Genetic:
+    attributes:
+      Gene Name:
+        identifier: false
+        required: false
+        range: string
+      Ensembl ID:
+        identifier: false
+        required: false
+        range: string
+      Protein Name:
+        identifier: false
+        required: false
+        range: string
+      Geno Type:
+        identifier: false
+        required: false
+        range: string
+      oligo primer :
+        identifier: false
+        required: false
+        range: string
+      Protein URL:
+        identifier: false
+        required: false
+        range: string
+      Gene Symbol:
+        identifier: false
+        required: false
+        range: string
