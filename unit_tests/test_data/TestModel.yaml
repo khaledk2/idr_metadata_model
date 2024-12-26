@@ -1,0 +1,30 @@
+# linkml-validate -s image_schema.yaml
+#gen-python image_schema.yaml --genmeta  > image_schema.py
+#install plantuml
+#gen-plantuml image_schema.yaml > image_3.puml
+#plantuml  image_3.puml
+
+id: testmodel.image.schema
+name: testmodel_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for image
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+  TestModel:
+    attributes:
+      Protein Name:
+        range: string
+        required: true
+      Organism:
+        range: string
+        required: false
+      Cell Line:
+        range: string
+        required: false

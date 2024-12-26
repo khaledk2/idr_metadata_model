@@ -122,6 +122,7 @@ def set_data_for_testing (org_data):
     return new_test
 
 def validate_data(resource_json, target_schema="Image"):
+    data_is_valid = True
     for res_json in resource_json:
         try:
             test_res_json=set_data_for_testing(res_json)
@@ -131,6 +132,8 @@ def validate_data(resource_json, target_schema="Image"):
         except Exception as e:
             print("Validation failed for %s , id: %s, error message is: %s"%(target_schema,res_json.get("id"),e))
             print("Validation error is: %s" %e)
+            data_is_valid=False
+    return data_is_valid
 
 def create_schema_class_run_time(schema_path):
     import subprocess, os
@@ -145,15 +148,15 @@ def create_schema_class_run_time(schema_path):
         lines = f.readlines()
     with open(class_path, "w") as f:
         for line in lines:
-            if "from .types import String" not in line:
+            if "from .types import Integer, String" not in line and "from .types import String" not in line:
                 f.write(line)
     return class_path
 
 def validate_data_run_time(images_json, class_path):
     #from data.Biosample import Biosample
+    data_is_valid = True
     with open(class_path, 'r') as file:
         class_code = file.read()
-
     # Execute the class definition
     exec(class_code, globals())
     import os
@@ -171,9 +174,11 @@ def validate_data_run_time(images_json, class_path):
             else:
                 logger.info('No valid data is found the image data with id=%s, and name %s is not found.' % (
                 image_json.get("id"), image_json.get("name")))
+                data_is_valid=False
         except Exception as e:
-            print("Validation failed for image, id: %s, error message is: %s"%(image_json.get("id"),e))
-
+            logger.info("Validation failed for image, id: %s, error message is: %s"%(image_json.get("id"),e))
+            data_is_valid=False
+    return data_is_valid
 
 def save_results_file(results, file_name="results.json"):
     with open(file_name, "w") as outfile:

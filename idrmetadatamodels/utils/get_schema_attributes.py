@@ -18,17 +18,18 @@ def get_included_schema_classes(schema_class_name, schema_path=None):
     # Get the class definition
     class_def = schema_view.get_class(schema_class_name)
     # Extract all attributes (slots) for the class
-    for slot_name in class_def.attributes:
-        # Get slot definition which includes range and other details
-        slot_def = schema_view.get_slot(slot_name)
-        # Check attribute refers to another class
-        range_name = slot_def.range
-        if range_name:
-            # Check if the range is a class defined in the schema
-            if schema_view.get_class(range_name):
-                print("IT is a class: %s" % range_name)
-                included_schema_classes.append(range_name)
-                #included_schema_classes[range_name]=schema_view.get_class(range_name)
+    if class_def:
+        for slot_name in class_def.attributes:
+            # Get slot definition which includes range and other details
+            slot_def = schema_view.get_slot(slot_name)
+            # Check attribute refers to another class
+            range_name = slot_def.range
+            if range_name:
+                # Check if the range is a class defined in the schema
+                if schema_view.get_class(range_name):
+                    print("IT is a class: %s" % range_name)
+                    included_schema_classes.append(range_name)
+                    #included_schema_classes[range_name]=schema_view.get_class(range_name)
     return included_schema_classes
 
 def get_schema_class_attribut(schema_class_name):
