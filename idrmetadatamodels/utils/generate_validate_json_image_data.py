@@ -5,6 +5,8 @@ It will handle the data and create the objects from the generated python code (g
 Then it will get the json from the objects and validate it using the schema model
 This script is still in progress
 '''
+import sys
+
 from jsonpath_ng.bin.jsonpath import print_matches
 
 from idrmetadatamodels.models.image_schema import Image, OrganismPart, Organism, Phenotype, Compound, Protein, CellLine, SiRNA
@@ -45,7 +47,6 @@ def get_image_data_for_schema():
 
 def get_resource_from_single_attribute_qury(attr, value, target_schema="all", container_name=None, resource="image"):
     resources_results=get_query_results(attr, value, container_name,resource)
-    print(resources_results[0])
     import os
     schema_path=None
     if os.path.isfile(target_schema):
@@ -58,8 +59,9 @@ def get_image_data_inside_container(container,target_schema="all", resource="ima
     return (process_results(images_results,target_schema))
 
 
-def extract_schema_data(image, all_attributes, target_schema):
+def extract_schema_data(resource_data, all_attributes, target_schema):
     records={}
+    image_lower = {k.lower(): v for k, v in resource_data.items() if k}
     if target_schema in all_attributes:
         main_schema_attributes=all_attributes[target_schema]
     else:
@@ -68,12 +70,13 @@ def extract_schema_data(image, all_attributes, target_schema):
     for main_schema, atts in main_schema_attributes.items():
         for atr in atts:
             if atr.get("range") in ["string", "uri","integer"]:
-                if image.get(atr.get("name")):
-                    records[atr.get("name")]=image.get(atr.get("name"))
+                if resource_data.get(atr.get("name")):
+                    records[atr.get("name")]=resource_data.get(atr.get("name"))
+                elif image_lower.get(atr.get("name").lower()):
+                    records[atr.get("name")] = image_lower.get(atr.get("name"))
             else:
-                records[atr.get("name")] = extract_schema_data(image, all_attributes, atr.get("range"))
+                records[atr.get("name")] = extract_schema_data(resource_data, all_attributes, atr.get("range"))
     return records
-
 
 def process_results(resource_results, target_schema="Image", schema_path=None):
     resource_json = []
@@ -84,19 +87,15 @@ def process_results(resource_results, target_schema="Image", schema_path=None):
     included_schema_classes = get_included_schema_classes(target_schema, schema_path)
     for sub_schem in included_schema_classes:
         all_attributes[sub_schem]=get_schema_attributes(sub_schem)
-
     for res_rcord in resource_results:
         resource_ = convert_to_key_value(res_rcord)
         attrs=extract_schema_data(resource_,all_attributes,target_schema)
-
         if target_schema and target_schema.lower()!="image" and target_schema.lower()!="study":
             res_dict = {"id": res_rcord.get("id"), "name":res_rcord.get("name"),target_schema.lower(): attrs}
         else:
             res_dict = attrs
             res_dict["id"]=res_rcord.get("id")
             res_dict["name"]=res_rcord.get("name")
-
-
         #img_dict = json_dumper(json_dumper(image_obj))
         #del img_dict['@type']
         resource_json.append(res_dict)
