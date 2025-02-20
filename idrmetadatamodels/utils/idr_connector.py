@@ -14,7 +14,7 @@ from string import Template
 
 container_submit_query_url ="https://idr-testing.openmicroscopy.org/searchengine2/api/v1/resources/submitquery/"
 #submit_query_url ="https://idr.openmicroscopy.org/searchengine/api/v1/resources/submitquery/containers"
-submit_query_url =Template('''https://idr.openmicroscopy.org/searchengine/api/v1/resources/$resource_type/searchannotation/''')
+submit_query_url =Template('''https://idr-testing.openmicroscopy.org/searchengine2/api/v1/resources/$resource_type/searchannotation/''')
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -123,6 +123,7 @@ def query_searchengine(query_data, resource="image", container=False):
         submit_query_url_ = submit_query_url.substitute(resource_type=resource)
     else:
         submit_query_url_=container_submit_query_url
+
     query_data_json = json.dumps(query_data)
     bookmark, total_results = call_omero_searchengine_return_results(
         submit_query_url_, data=query_data_json

@@ -3,15 +3,15 @@
 import requests
 import json
 from idrmetadatamodels.utils.idr_connector import get_query_results
-from idrmetadatamodels.utils.generate_validate_json_image_data import get_resource_from_single_attribute_qury, validate_data
+from idrmetadatamodels.utils.generate_validate_json_image_data import get_resource_from_single_attribute_qury, validate_data, save_results_file
 
 
 def get_linmkl_for_uniprot_bucket(protein_url, validate=False):
     # call the idr and get the protein schema
     images_json = get_resource_from_single_attribute_qury("Protein URL", protein_url, "Protein")
-    if validate:
-        validate_data(images_json)
-    print(len(images_json))
+    #if validate:
+    #    validate_data(images_json)
+    save_results_file(images_json)
     return images_json
 
 
@@ -48,7 +48,7 @@ def determine_uniprot_images():
 
 #https://idr.openmicroscopy.org/webgateway/render_thumbnail/12805109/
 images_json=get_linmkl_for_uniprot_bucket("https://www.uniprot.org/uniprot/q15907",validate=True)
-print (json.dumps(images_json, indent=2))
-print(len(images_json))
+#print (json.dumps(images_json, indent=2))
+#print(len(images_json))
 
 #determine_uniprot_images()

@@ -81,8 +81,8 @@ ALso, the user can validate the results using the next method:
 
         validate_data(resource_json, target_schema)
    
-The user may save the results using the following method:
+The user may save the results using the following method, the default file name is "results.json" and th use can use his onw name
 
-        save_results_file(resource_json)
+        save_results_file(resource_json,file_name="my_results.json")
 
-In the example folder, the user can find some working examples.
+In the examples folder, the user can find some working examples.

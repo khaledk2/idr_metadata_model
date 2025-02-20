@@ -11,7 +11,7 @@ from idrmetadatamodels.utils.query_builder import build_query
 import json
 
 
-def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Image"):
+def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Image",resource="image"):
     '''
     Query using attibute name and value
     Limit the returned results to contain only organism classes
@@ -19,7 +19,7 @@ def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Im
     :return:
     '''
 
-    images_json = get_resource_from_single_attribute_qury(attribute_name, attribute_value, target_schema)
+    images_json = get_resource_from_single_attribute_qury(attribute_name, attribute_value, target_schema, resource=resource)
     class_path=create_schema_class_run_time(target_schema)
     validate_data_run_time(images_json,class_path)
     save_results_file(images_json)
@@ -27,6 +27,5 @@ def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Im
     print(images_json[0])
 
 
-run_query_for_attr_value("Protein Name", "ras-related protein 11b", "../data/Genetic.yaml")
-#Genetic
-#Biosample
+#run_query_for_attr_value("Protein Name", "ras-related protein 11b", "../data/Genetic.yaml")
+run_query_for_attr_value("Gene symbol", "B0336.10, rpl-23", "../data/SSBDProject.yaml", resource="project")

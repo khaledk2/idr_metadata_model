@@ -36,9 +36,8 @@ def convert_to_key_value(json_ob):
             for lst in item: #json_ob.get("key_values"):
                 if type(lst) is dict:
                         objects[lst.get("name")]=lst.get("value")
-        #else:
-        #    objects[key]=item
-
+        else:
+            objects[key]=item
     return objects
 
 def get_image_data_for_schema():
@@ -89,7 +88,7 @@ def process_results(resource_results, target_schema="Image", schema_path=None):
     for res_rcord in resource_results:
         resource_ = convert_to_key_value(res_rcord)
         attrs=extract_schema_data(resource_,all_attributes,target_schema)
-        if target_schema and target_schema.lower()!="image" and target_schema.lower()!="study":
+        if target_schema and target_schema.lower()!="image" and target_schema.lower()!="study": #and target_schema.lower()!="ssbdproject":
             res_dict = {"id": res_rcord.get("id"), "name":res_rcord.get("name"),target_schema.lower(): attrs}
         else:
             res_dict = attrs
@@ -129,8 +128,8 @@ def validate_data(resource_json, target_schema="Image"):
             res_object = res_class(**test_res_json)  # This will raise an error if validation fails
             logger.info('Valid data!, the %s  data with id=%s, and name %s is valid.' %(target_schema, res_json.get("id"), res_json.get("name")))
         except Exception as e:
-            print("Validation failed for %s , id: %s, error message is: %s"%(target_schema,res_json.get("id"),e))
-            print("Validation error is: %s" %e)
+            logger.info("Validation failed for %s , id: %s, error message is: %s"%(target_schema,res_json.get("id"),e))
+            logger.info("Validation error is: %s" %e)
             data_is_valid=False
     return data_is_valid
 
@@ -141,8 +140,8 @@ def create_schema_class_run_time(schema_path):
     class_path = os.path.join(schema_folder,"%s.py"%class_name )
     command = "gen-python %s --genmeta > %s" % (schema_path, class_path)
     proc = subprocess.run(command, shell=True, capture_output=True, text=True)
-    print("Output: ", proc.stdout)
-    print("Error:  ", proc.stderr)
+    logger.info("Output: %s"%proc.stdout)
+    logger.info("Error:  %s"%proc.stderr)
     with open(class_path, "r") as f:
         lines = f.readlines()
     with open(class_path, "w") as f:
@@ -168,6 +167,10 @@ def validate_data_run_time(images_json, class_path):
                 modified_class={}
                 for key, value in class_data.items():
                     modified_class[key.replace(" ","_")]=value
+                #for ke, val in image_json.items():
+                #    if ke==schema_class_name.lower():
+                #        continue
+                #    modified_class[ke]=val
                 schema_class = Schema_class(**modified_class)  # This will raise an error if validation fails
                 logger.info('Valid data!, the image data with id=%s, and name %s is valid.' %(image_json.get("id"), image_json.get("name")))
             else:
