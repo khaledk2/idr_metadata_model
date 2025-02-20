@@ -28,4 +28,6 @@ def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Im
 
 
 #run_query_for_attr_value("Protein Name", "ras-related protein 11b", "../data/Genetic.yaml")
-run_query_for_attr_value("Gene symbol", "B0336.10, rpl-23", "../data/SSBDProject.yaml", resource="project")
+#run_query_for_attr_value("Gene symbol", "B0336.10, rpl-23", "../data/SSBDProject.yaml", resource="project")
+
+run_query_for_attr_value("Organism", "Homo sapiens", "../data/SSBDProject.yaml", resource="project")

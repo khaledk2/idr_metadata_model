@@ -44,6 +44,7 @@ def get_current_page_bookmark(pagination_dict):
 
 def call_omero_searchengine_return_results(url, data=None, method="post",):
     global page, total_pages, pagination_dict, next_page
+    datasource_ids={}
 
     if method == "post":
         resp = requests.post(url, data=data)
@@ -66,16 +67,21 @@ def call_omero_searchengine_return_results(url, data=None, method="post",):
         # get the size of the total results
         total_pages = pagination_dict.get("total_pages")
         next_page = pagination_dict.get("next_page")
-
         total_results = returned_results["results"]["size"]
-
         for res in returned_results["results"]["results"]:
             received_results.append(res)
-            if res["id"] in ids:
-                raise Exception(" Id dublicated error  %s" % res["id"])
-            ids.append(res["id"])
+            if not res.get("data_source"):
+                if res["id"] in ids:
+                    raise Exception(" Id duplicated error  %s" % res["id"])
+                ids.append(res["id"])
+            else:
+                if res.get("data_source") in datasource_ids:
+                    if res["id"] in datasource_ids[res.get("data_source")]:
+                        raise Exception(" Id duplicated error  %s for data source %s" % (res["id"], res.get("data_source")))
+                    datasource_ids[res.get("data_source")].append(res["id"])
+                else:
+                    datasource_ids[res.get("data_source")]=[res["id"]]
         return bookmark, total_results
-
     except Exception as ex:
         logging.info("Error: %s" % ex)
 
@@ -132,7 +138,6 @@ def query_searchengine(query_data, resource="image", container=False):
         "page: %s, / %s received results: %s / %s"
         % (page, total_pages, len(received_results), total_results)
     )
-
     while next_page:  # len(received_results) < total_results:
         query_data_ = {
             "query_details": query_data["query_details"],
