@@ -1,0 +1,56 @@
+id: ssbd.project.schema
+name: ssbd_project_schema
+description: A LinkML schema for project translated from the https://github.com/openssbd/ssbd-metadata
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+  SSBDProject:
+    attributes:
+      id:
+        required: true
+        identifier: true
+        range: string
+      name:
+        identifier: false
+        required: false
+        range: string
+      URL:
+        identifier: false
+        required: false
+        range: string
+      DOI:
+        identifier: false
+        required: false
+        range: string
+      type:
+        identifier: false
+        required: false
+        range: string
+      description:
+        required: false
+        range: string
+        identifier: false
+      date_of_released:
+        required: false
+        range: string
+        identifier: false
+      date_of_updated:
+        required: false
+        range: string
+        identifier: false
+      date_of_opened:
+        required: false
+        range: string
+        identifier: false
+      license:
+        required: false
+        identifier: false
+        range: string
+
