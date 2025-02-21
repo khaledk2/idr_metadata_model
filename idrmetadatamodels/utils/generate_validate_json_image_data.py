@@ -43,8 +43,8 @@ def convert_to_key_value(json_ob):
 def get_image_data_for_schema():
     pass
 
-def get_resource_from_single_attribute_qury(attr, value, target_schema="all", container_name=None, resource="image"):
-    resources_results=get_query_results(attr, value, container_name,resource)
+def get_resource_from_single_attribute_qury(attr, value, target_schema="all", container_name=None, resource="image",data_source=None):
+    resources_results=get_query_results(attr, value, container_name,resource, data_source)
     import os
     schema_path=None
     if os.path.isfile(target_schema):

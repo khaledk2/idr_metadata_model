@@ -85,7 +85,7 @@ def call_omero_searchengine_return_results(url, data=None, method="post",):
     except Exception as ex:
         logging.info("Error: %s" % ex)
 
-def get_query_results(re_attribute, value, container_name=None, resource="image"):
+def get_query_results(re_attribute, value, container_name=None, resource="image",data_source=None):
     rest_variables()
     and_filters = [
         {
@@ -107,7 +107,7 @@ def get_query_results(re_attribute, value, container_name=None, resource="image"
     if container_name:
         return query_searchengine(query_data, resource, container=True)
     else:
-        return query_searchengine(query_data, resource)
+        return query_searchengine(query_data, resource, data_source=data_source)
 
 def get_results(container_name, resource="image"):
     start = datetime.datetime.now()
@@ -124,9 +124,11 @@ def get_results(container_name, resource="image"):
     query_data = {"query_details": {"and_filters": and_filters}}
     return query_searchengine(query_data, resource, container=True)
 
-def query_searchengine(query_data, resource="image", container=False):
+def query_searchengine(query_data, resource="image", container=False, data_source=None):
     if not container:
         submit_query_url_ = submit_query_url.substitute(resource_type=resource)
+        if data_source:
+            submit_query_url_="%s/?data_source=%s"%(submit_query_url_,data_source)
     else:
         submit_query_url_=container_submit_query_url
 
