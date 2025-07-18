@@ -50,6 +50,9 @@ Generate excel playbook
         gen-excel idrmetadatamodels/models/image_schema.yaml > idrmetadatamodels/models/image.xlsx
 
 
+gen-rdf idrmetadatamodels/models/image_schema.yaml-o output.rdf
+
+
 Data Search
 ===========
 Users can query the search engine, and the returned data will be formatted to be compatible with the IDR schema. They can provide search criteria and, if no schema is specified, the default “image” schema will be used., users have the option to request a sub-schema, such as " Cell Line" Additionally.

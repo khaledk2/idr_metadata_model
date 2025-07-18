@@ -14,7 +14,7 @@ from string import Template
 
 container_submit_query_url ="https://idr-testing.openmicroscopy.org/searchengine2/api/v1/resources/submitquery/"
 #submit_query_url ="https://idr.openmicroscopy.org/searchengine/api/v1/resources/submitquery/containers"
-submit_query_url =Template('''https://idr-testing.openmicroscopy.org/searchengine2/api/v1/resources/$resource_type/searchannotation/''')
+submit_query_url =Template('''https://idr-testing.openmicroscopy.org/searchengine/api/v1/resources/$resource_type/searchannotation/''')
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -128,7 +128,7 @@ def query_searchengine(query_data, resource="image", container=False, data_sourc
     if not container:
         submit_query_url_ = submit_query_url.substitute(resource_type=resource)
         if data_source:
-            submit_query_url_="%s/?data_source=%s"%(submit_query_url_,data_source)
+            submit_query_url_="%s?data_source=%s"%(submit_query_url_,data_source)
     else:
         submit_query_url_=container_submit_query_url
 
