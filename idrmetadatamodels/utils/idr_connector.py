@@ -12,9 +12,9 @@ import sys
 from string import Template
 
 
-container_submit_query_url ="https://idr-testing.openmicroscopy.org/searchengine2/api/v1/resources/submitquery/"
+container_submit_query_url ="https://idr.openmicroscopy.org/searchengine2/api/v1/resources/submitquery/"
 #submit_query_url ="https://idr.openmicroscopy.org/searchengine/api/v1/resources/submitquery/containers"
-submit_query_url =Template('''https://idr-testing.openmicroscopy.org/searchengine/api/v1/resources/$resource_type/searchannotation/''')
+submit_query_url =Template('''https://idr.openmicroscopy.org/searchengine/api/v1/resources/$resource_type/searchannotation/''')
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
