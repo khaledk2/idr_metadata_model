@@ -1,0 +1,32 @@
+id: idr.publication.schema
+name: publication_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for publication
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+  Publication:
+    description: A Publication entity.
+    attributes:
+      Publication Title:
+        description: Publication Title
+        range: string
+        required: false
+      Publication Authors:
+        description: Publication Author
+        range: string
+        required: false
+      Publication DOI:
+        description: Publication DOI
+        range: string
+        required: false
+      Publication DOI URL:
+        description: Publication DOI URL
+        required: false
+        range: string

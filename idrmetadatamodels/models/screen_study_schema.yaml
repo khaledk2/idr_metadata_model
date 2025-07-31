@@ -1,0 +1,33 @@
+id: idr.screen_study.schema
+name: screen_study_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for study
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+  - licence_schema
+  - publication_schema
+  - study_schema
+
+classes:
+  Screen_study:
+    is_a: Study
+    description: Screen study
+    attributes:
+      screen_description:
+        description: screen description
+        range: string
+        required: true
+      screen_technology_type:
+        description: Screen Technology Type
+        required: true
+        range: string
+      screen_type:
+        description: Screen Type
+        required: true
+        range: string

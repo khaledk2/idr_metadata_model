@@ -9,9 +9,12 @@ import logging
 import json
 import requests
 import sys
+from string import Template
 
 
-submit_query_url ="https://idr.openmicroscopy.org/searchengine/api/v1/resources/submitquery/"
+container_submit_query_url ="https://idr.openmicroscopy.org/searchengine2/api/v1/resources/submitquery/"
+#submit_query_url ="https://idr.openmicroscopy.org/searchengine/api/v1/resources/submitquery/containers"
+submit_query_url =Template('''https://idr.openmicroscopy.org/searchengine/api/v1/resources/$resource_type/searchannotation/''')
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -41,6 +44,8 @@ def get_current_page_bookmark(pagination_dict):
 
 def call_omero_searchengine_return_results(url, data=None, method="post",):
     global page, total_pages, pagination_dict, next_page
+    datasource_ids={}
+
     if method == "post":
         resp = requests.post(url, data=data)
     else:
@@ -62,27 +67,32 @@ def call_omero_searchengine_return_results(url, data=None, method="post",):
         # get the size of the total results
         total_pages = pagination_dict.get("total_pages")
         next_page = pagination_dict.get("next_page")
-
         total_results = returned_results["results"]["size"]
-
         for res in returned_results["results"]["results"]:
             received_results.append(res)
-            if res["id"] in ids:
-                raise Exception(" Id dublicated error  %s" % res["id"])
-            ids.append(res["id"])
+            if not res.get("data_source"):
+                if res["id"] in ids:
+                    raise Exception(" Id duplicated error  %s" % res["id"])
+                ids.append(res["id"])
+            else:
+                if res.get("data_source") in datasource_ids:
+                    if res["id"] in datasource_ids[res.get("data_source")]:
+                        raise Exception(" Id duplicated error  %s for data source %s" % (res["id"], res.get("data_source")))
+                    datasource_ids[res.get("data_source")].append(res["id"])
+                else:
+                    datasource_ids[res.get("data_source")]=[res["id"]]
         return bookmark, total_results
-
     except Exception as ex:
         logging.info("Error: %s" % ex)
 
-def get_query_results(re_attribute, value, container_name=None):
+def get_query_results(re_attribute, value, container_name=None, resource="image",data_source=None):
     rest_variables()
     and_filters = [
         {
             "name": re_attribute,
             "value": value,  # "idr0051", #"idr0157",
             "operator": "equals",
-            "resource": "image"
+            "resource": resource
         },
     ]
     if container_name:
@@ -94,10 +104,14 @@ def get_query_results(re_attribute, value, container_name=None):
         })
 
     query_data = {"query_details": {"and_filters": and_filters}}
-    return query_searchengine(query_data)
+    if container_name:
+        return query_searchengine(query_data, resource, container=True)
+    else:
+        return query_searchengine(query_data, resource, data_source=data_source)
 
-def get_results(container_name):
+def get_results(container_name, resource="image"):
     start = datetime.datetime.now()
+
     and_filters = [
         {
             "name": "name",
@@ -108,18 +122,24 @@ def get_results(container_name):
     ]
 
     query_data = {"query_details": {"and_filters": and_filters}}
-    return query_searchengine(query_data)
-def query_searchengine(query_data):
+    return query_searchengine(query_data, resource, container=True)
+
+def query_searchengine(query_data, resource="image", container=False, data_source=None):
+    if not container:
+        submit_query_url_ = submit_query_url.substitute(resource_type=resource)
+        if data_source:
+            submit_query_url_="%s?data_source=%s"%(submit_query_url_,data_source)
+    else:
+        submit_query_url_=container_submit_query_url
 
     query_data_json = json.dumps(query_data)
     bookmark, total_results = call_omero_searchengine_return_results(
-        submit_query_url, data=query_data_json
+        submit_query_url_, data=query_data_json
     )
     logging.info(
         "page: %s, / %s received results: %s / %s"
         % (page, total_pages, len(received_results), total_results)
     )
-
     while next_page:  # len(received_results) < total_results:
         query_data_ = {
             "query_details": query_data["query_details"],
@@ -128,7 +148,7 @@ def query_searchengine(query_data):
         query_data_json_ = json.dumps(query_data_)
 
         bookmark, total_results = call_omero_searchengine_return_results(
-            submit_query_url, data=query_data_json_
+            submit_query_url_, data=query_data_json_
         )
 
         logging.info(
@@ -136,5 +156,6 @@ def query_searchengine(query_data):
             % (bookmark, page, total_pages, len(received_results), total_results)
         )
     end = datetime.datetime.now()
+
     return received_results
 

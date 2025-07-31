@@ -1,0 +1,48 @@
+id: ssbd.biosampley.schema
+name: biosampley_ssbd_schema
+description: A LinkML schema for biosampele translated from the https://github.com/openssbd/ssbd-metadata
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+  Biosample:
+    attributes:
+      organism:
+        identifier: false
+        required: true
+        range: string
+      cell line:
+        identifier: false
+        required: true
+        range: string
+      strain:
+        identifier: false
+        required: false
+        range: string
+      cell:
+        identifier: false
+        required: false
+        range: string
+      MeSH term:
+        identifier: false\q
+        required: false
+        range: string
+      intrinsic variable:
+        required: false
+        range: string
+      extrinsic variable:
+        required: false
+        range: string
+      genetic variable:
+        required: false
+        range: string
+      treat variable:
+        required: false
+        range: string
+

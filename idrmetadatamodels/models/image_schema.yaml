@@ -65,5 +65,3 @@ classes:
       protein:
         required: false
         range: Protein
-
-

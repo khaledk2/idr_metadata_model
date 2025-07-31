@@ -1,0 +1,29 @@
+id: idr.license.schema
+name: License_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for License
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+
+classes:
+  License:
+    description: The study license
+    attributes:
+      License:
+        range: string
+        required: false
+      Copyright:
+        range: string
+        required: false
+      Data Publisher:
+        range: string
+        required: false
+      Data DOI:
+        range: string
+        required: false
+

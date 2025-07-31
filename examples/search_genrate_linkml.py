@@ -1,5 +1,5 @@
 from  idrmetadatamodels.utils.generate_validate_json_image_data import (
-    get_image_from_single_attribute_qury,
+    get_resource_from_single_attribute_qury,
     get_image_data_inside_container,
     validate_data,
     save_results_file,
@@ -39,7 +39,7 @@ def run_query_container(container):
     save_results_file(images_json)
     logger.info(len(images_json))
 
-def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Image"):
+def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Image", resource="image"):
     '''
     Query using attibute name and value
     Limit the returned results to contain only organism classes
@@ -47,12 +47,13 @@ def run_query_for_attr_value(attribute_name, attribute_value , target_schema="Im
     :return:
     '''
 
-    images_json = get_image_from_single_attribute_qury(attribute_name, attribute_value, target_schema)
-    validate_data(images_json)
-    save_results_file(images_json)
-    logger.info("Number of generated records: %s"%len(images_json))
-    print(images_json[0])
+    resource_json = get_resource_from_single_attribute_qury(attribute_name, attribute_value, target_schema, resource=resource)
+    validate_data(resource_json, target_schema)
+    save_results_file(resource_json)
+    logger.info("Number of generated records: %s"%len(resource_json))
+    print(resource_json[0])
 
 #run_json_query()
-run_query_container("idr0157")
-#run_query_for_attr_value("Organism", "Danio rerio", "All")
+#run_query_container("idr0157")
+run_query_for_attr_value("Organism", "Danio rerio", "Image")
+#run_query_for_attr_value("Organism", "Danio rerio", "Study",resource="project")

@@ -13,10 +13,10 @@ imports:
 classes:
   Cell line:
     attributes:
-      Cell lines:
+      Cell line:
         identifier : true
         range: string
         required: true
-      Cell Lines Supplementary:
+      Cell Line Supplementary:
         range: string
         required: false

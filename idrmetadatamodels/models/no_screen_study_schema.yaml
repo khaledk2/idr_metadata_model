@@ -1,0 +1,25 @@
+id: idr.no_screen_study.schema
+name: no_screen_study_idr_schema
+description: A LinkML schema translated from the idr key-value pairs for study
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+default_prefix: linkml
+
+imports:
+  - linkml:types
+  - https://linkml.io/linkml-model/linkml_model/model/schema/types
+  - licence_schema
+  - publication_schema
+  - study_schema
+
+classes:
+  No_screen_study:
+    is_a: Study
+    description: An experimental study
+    attributes:
+      experimental_description:
+        description: experimental description
+        range: string
+        required: true
